@@ -2,15 +2,19 @@
 
 import unittest
 import os
-from parsers import allmusic
+from parsers.allmusic.discography import AllmusicDiscographyParser
+from parsers.allmusic.album import AllmusicAlbumParser
 
 
 class AllmusicTestCase(unittest.TestCase):
-    def test_parse_albums_list(self):
-        parser = allmusic.Allmusic()
+    def test_get_albums(self):
+        parser = AllmusicDiscographyParser()
         file_path = os.path.dirname(__file__) + \
                 '/fixtures/allmusic_albums_list.html'
-        result = parser.parse_albums_list(file_path)
+        with open(file_path, 'r') as f:
+            data = f.read()
+        f.close()
+        result = parser.parse(data)
         expected = {'albums': [
             {'title': 'All Wound Up', 'year': 1998},
             {'title': 'Godsmack', 'year': 1998},
@@ -25,10 +29,13 @@ class AllmusicTestCase(unittest.TestCase):
         self.assertEqual(expected, result)
 
 
-    def test_parse_album(self):
-        parser = allmusic.Allmusic()
+    def test_get_tracks(self):
+        parser = AllmusicAlbumParser()
         file_path = os.path.dirname(__file__) + '/fixtures/allmusic_album.html'
-        result = parser.parse_album(file_path)
+        with open(file_path, 'r') as f:
+            data = f.read()
+        f.close()
+        result = parser.parse(data)
         expected = {'tracks': [
             {'title': 'Moon Baby', 'duration': 262},
             {'title': 'Immune', 'duration': 287},
