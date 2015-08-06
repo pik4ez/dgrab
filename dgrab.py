@@ -25,4 +25,4 @@ if __name__ == '__main__':
     action = sherlock.deduct_action(args.uri)
     if action is None:
         sys.exit('Unsupported service.')
-    action().run()
+    action().run(args)
