@@ -55,10 +55,11 @@ class AllmusicAlbumParser(AbstractParser):
 
     """Returns year from release date in allmusic format.
     
-    Allmusic release date format: July 28, 1998.
+    Allmusic release date formats: "July 28, 1998" or just "1998".
     """
     def get_release_year(self, release_date):
         s = release_date.split(',')
-        if not s[1]:
-            return None
-        return int(s[1].strip())
+        if len(s) == 1:
+            return int(s[0].strip())
+        else:
+            return int(s[1].strip())
