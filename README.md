@@ -1,7 +1,13 @@
 dgrab
 =====
 
-Discography grabber. Creates albums list json files compatible with vkmus.
+Discography grabber. Creates albums lists compatible with vkapi.
+
+
+Supported sources
+-----------------
+
+* Allmusic
 
 
 Usage
