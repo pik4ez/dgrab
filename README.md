@@ -7,8 +7,8 @@ Discography grabber. Creates albums lists compatible with vkapi.
 Supported sources
 -----------------
 
-* Allmusic
-* Discogs
+* Allmusic (http://allmusic.com)
+* Discogs (http://discogs.com)
 
 
 Usage
