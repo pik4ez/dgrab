@@ -8,6 +8,7 @@ Supported sources
 -----------------
 
 * Allmusic
+* Discogs
 
 
 Usage
