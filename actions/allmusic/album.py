@@ -1,5 +1,5 @@
 import json
-import urllib.request
+import requests
 from actions.abstract_action import AbstractAction
 from parsers.allmusic.album import AllmusicAlbumParser
 
@@ -7,17 +7,16 @@ from parsers.allmusic.album import AllmusicAlbumParser
 class AllmusicAlbumAction(AbstractAction):
     def run(self, args):
         # Get raw data by uri.
-        req = urllib.request.Request(args.uri, headers={
+        response = requests.get(args.uri, headers={
             'User-Agent': 'Mozilla/5.0'
             })
-        data = urllib.request.urlopen(req).read()
-        if not data:
+        if response.status_code != requests.codes.ok:
             print('Failed to read uri.')
             return
 
         # Parse data using allmusic:album parser.
         parser = AllmusicAlbumParser()
-        album = parser.parse(data)
+        album = parser.parse(response.text)
         if not album:
             print('Failed to get album data by uri.')
             return
