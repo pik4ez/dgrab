@@ -1,3 +1,4 @@
+import sys
 from bs4 import BeautifulSoup
 from parsers.abstract_parser import AbstractParser
 
@@ -5,24 +6,26 @@ from parsers.abstract_parser import AbstractParser
 class AllmusicAlbumParser(AbstractParser):
     def parse(self, data):
         album = {}
+
         soup = BeautifulSoup(data, 'html.parser')
 
         # Extract artist, title and year.
         album['artist'] = soup\
-                .find('h3', id='album-artist-link')\
+                .find('h2', id='album-artist-link')\
                 .find('a')\
                 .string
         album['artist'] = self.normalize_whitespaces(album['artist'])
         album['title'] = soup\
-                .find('h2', class_='album-title')\
+                .find('h1', class_='album-title')\
                 .string
         album['title'] = self.normalize_whitespaces(album['title'])
-        album['year'] = soup\
-                .find('div', class_='release-date')\
-                .find('span')\
-                .string\
-                .strip()
-        album['year'] = self.get_release_year(album['year'])
+        if soup.find('div', class_='release_date'):
+            album['year'] = soup\
+                    .find('div', class_='release-date')\
+                    .find('span')\
+                    .string\
+                    .strip()
+            album['year'] = self.get_release_year(album['year'])
 
         # Extract tracks.
         rows = soup.find_all('tr', class_='track')
@@ -54,7 +57,7 @@ class AllmusicAlbumParser(AbstractParser):
 
 
     """Returns year from release date in allmusic format.
-    
+
     Allmusic release date formats: "July 28, 1998" or just "1998".
     """
     def get_release_year(self, release_date):
