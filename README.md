@@ -30,3 +30,12 @@ Extending
 
 * improve sherlock's deduction to return appropriate parser for your uri
 * write parser similar to existing one
+
+
+Tests
+-----
+
+```
+cd path/to/dgrab
+./all_tests.sh
+```
