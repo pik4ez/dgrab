@@ -1,10 +1,9 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AbstractAction(object):
+class AbstractDownloader(object):
     __metaclass__ = ABCMeta
 
-
     @abstractmethod
-    def run(self, data):
+    def download(self, uri):
         pass

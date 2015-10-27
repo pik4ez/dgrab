@@ -11,15 +11,15 @@ class AllmusicAlbumParser(AbstractParser):
 
         # Extract artist, title and year.
         album['artist'] = soup\
-                .find('h2', id='album-artist-link')\
-                .find('a')\
-                .string
+            .find('h2', id='album-artist-link')\
+            .find('a')\
+            .string
         album['artist'] = self.normalize_whitespaces(album['artist'])
         album['title'] = soup\
-                .find('h1', class_='album-title')\
-                .string
+            .find('h1', class_='album-title')\
+            .string
         album['title'] = self.normalize_whitespaces(album['title'])
-        if soup.find('div', class_='release_date'):
+        if soup.find('div', class_='release-date'):
             album['year'] = soup\
                     .find('div', class_='release-date')\
                     .find('span')\
@@ -36,10 +36,10 @@ class AllmusicAlbumParser(AbstractParser):
 
             # Extract track title.
             title = row\
-                    .find('td', class_='title-composer')\
-                    .find('div', class_='title')\
-                    .a\
-                    .string
+                .find('td', class_='title-composer')\
+                .find('div', class_='title')\
+                .a\
+                .string
             title = self.normalize_whitespaces(title)
             track['title'] = title
 
@@ -55,12 +55,11 @@ class AllmusicAlbumParser(AbstractParser):
 
         return {'albums': [album]}
 
-
-    """Returns year from release date in allmusic format.
-
-    Allmusic release date formats: "July 28, 1998" or just "1998".
-    """
     def get_release_year(self, release_date):
+        """Returns year from release date in allmusic format.
+
+        Allmusic release date formats: "July 28, 1998" or just "1998".
+        """
         s = release_date.split(',')
         if len(s) == 1:
             return int(s[0].strip())

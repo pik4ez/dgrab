@@ -2,52 +2,118 @@
 
 import unittest
 from sherlock import Sherlock
-from actions.allmusic.discography import AllmusicDiscographyAction
-from actions.allmusic.album import AllmusicAlbumAction
-from actions.discogs.discography import DiscogsDiscographyAction
-from actions.discogs.album import DiscogsAlbumAction
+from downloaders.http import HttpDownloader
+from downloaders.file import FileDownloader
+from parsers.allmusic.album import AllmusicAlbumParser
+from parsers.discogs.album import DiscogsAlbumParser
+
 
 class SherlockTestCase(unittest.TestCase):
-    def test_allmusic_discography(self):
+    def test_unknown(self):
         s = Sherlock()
-        expected = AllmusicDiscographyAction
-        result = s.deduct_action(
-                'http://www.allmusic.com' + \
-                        '/artist/godsmack-mn0000665860/discography'
-                )
-        self.assertEqual(expected, result)
+        result = s.deduct('dontdnowdahellzthat')
+        self.assertEqual((None, None), result)
 
-
-    def test_allmusic_album(self):
+    def test_allmusic(self):
         s = Sherlock()
-        expected = AllmusicAlbumAction
-        result = s.deduct_action(
+
+        # Http. URI doesn't need normalization.
+        result = s.deduct(
+            'http://www.allmusic.com/album/all-wound-up-mw0001888339'
+            )
+        self.assertEqual(
+            (
+                HttpDownloader,
+                AllmusicAlbumParser,
                 'http://www.allmusic.com/album/all-wound-up-mw0001888339'
-                )
-        self.assertEqual(expected, result)
+                ),
+            result
+            )
 
+        # File. Uri should be normalized.
+        result = s.deduct(
+            'file:allmusic:/path/to/allmusic_album.html'
+            )
+        self.assertEqual(
+            (
+                FileDownloader,
+                AllmusicAlbumParser,
+                '/path/to/allmusic_album.html'
+                ),
+            result
+            )
 
-    def test_discogs_discography(self):
+    def test_discogs(self):
         s = Sherlock()
-        expected = DiscogsDiscographyAction
-        result = s.deduct_action(
-                'http://www.discogs.com/artist/85885-Pantera'
-                )
-        self.assertEqual(expected, result)
 
-
-    def test_discogs_album(self):
-        s = Sherlock()
-        expected = DiscogsAlbumAction
-        result = s.deduct_action(
+        # Http. URI doesn't need normalization.
+        result = s.deduct(
+            'http://www.discogs.com/Pantera-Power-Metal/master/244264'
+            )
+        self.assertEqual(
+            (
+                HttpDownloader,
+                DiscogsAlbumParser,
                 'http://www.discogs.com/Pantera-Power-Metal/master/244264'
-                )
-        self.assertEqual(expected, result)
-        result = s.deduct_action(
+                ),
+            result
+            )
+        result = s.deduct(
+            'http://www.discogs.com/Pantera-Psycho-Holiday/release/3139636'
+            )
+        self.assertEqual(
+            (
+                HttpDownloader,
+                DiscogsAlbumParser,
                 'http://www.discogs.com/Pantera-Psycho-Holiday/release/3139636'
-                )
-        self.assertEqual(expected, result)
+                ),
+            result
+            )
 
+        # File. Uri should be normalized.
+        result = s.deduct(
+            'file:discogs:/path/to/discogs_album.html'
+            )
+        self.assertEqual(
+            (
+                FileDownloader,
+                DiscogsAlbumParser,
+                '/path/to/discogs_album.html'
+                ),
+            result
+            )
+
+    def test_clean_file_uri(self):
+        s = Sherlock()
+
+        # Known type and source, requires uri filtering.
+        self.assertEqual(
+            s.clean_file_uri('file:allmusic:/path/to/file.html'),
+            '/path/to/file.html'
+            )
+        # Known type and source, no uri filtering required.
+        self.assertEqual(
+            s.clean_file_uri('http://allmusic.com/artist/album.html'),
+            None
+            )
+
+        # Unknown type, known source.
+        self.assertEqual(
+            s.clean_file_uri('kyle:allmusic:/path/to/file.html'),
+            None
+            )
+
+        # Known type, unknown source.
+        self.assertEqual(
+            s.clean_file_uri('file:abuzick:/path/to/file.html'),
+            None
+            )
+
+        # Unknown type, unknown source.
+        self.assertEqual(
+            s.clean_file_uri('kyle:abuzick:/path/to/file.html'),
+            None
+            )
 
 if __name__ == '__main__':
     unittest.main()

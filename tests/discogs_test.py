@@ -2,7 +2,6 @@
 
 import unittest
 import os
-from parsers.discogs.discography import DiscogsDiscographyParser
 from parsers.discogs.album import DiscogsAlbumParser
 
 

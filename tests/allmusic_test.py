@@ -2,33 +2,10 @@
 
 import unittest
 import os
-from parsers.allmusic.discography import AllmusicDiscographyParser
 from parsers.allmusic.album import AllmusicAlbumParser
 
 
 class AllmusicTestCase(unittest.TestCase):
-    def test_get_discography(self):
-        parser = AllmusicDiscographyParser()
-        file_path = os.path.dirname(__file__) + \
-                '/fixtures/allmusic_discography.html'
-        with open(file_path, 'r') as f:
-            data = f.read()
-        f.close()
-        result = parser.parse(data)
-        expected = {'albums': [
-            {'title': 'All Wound Up', 'year': 1998},
-            {'title': 'Godsmack', 'year': 1998},
-            {'title': 'Awake', 'year': 2000},
-            {'title': 'Faceless', 'year': 2003},
-            {'title': 'The Other Side', 'year': 2004},
-            {'title': 'IV', 'year': 2006},
-            {'title': 'The Oracle', 'year': 2010},
-            {'title': 'Live & Inspired', 'year': 2012},
-            {'title': '1000hp', 'year': 2014}
-            ]}
-        self.assertEqual(expected, result)
-
-
     def test_get_album(self):
         parser = AllmusicAlbumParser()
         file_path = os.path.dirname(__file__) + '/fixtures/allmusic_album.html'
@@ -55,7 +32,6 @@ class AllmusicTestCase(unittest.TestCase):
                     {'title': 'Whatever', 'duration': 205}
                     ]}]}
         self.assertEqual(expected, result)
-
 
     def test_get_release_year(self):
         parser = AllmusicAlbumParser()
