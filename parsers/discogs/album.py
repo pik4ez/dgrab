@@ -25,7 +25,7 @@ class DiscogsAlbumParser(AbstractParser):
         # Extract tracks.
         rows = soup\
             .find('div', id='tracklist')\
-            .find_all('tr', class_='tracklist_track')
+            .select('tr.tracklist_track.track')
         if rows:
             album['tracks'] = []
         for row in rows:
