@@ -11,7 +11,7 @@ class AllmusicAlbumParser(AbstractParser):
 
         # Extract artist, title and year.
         album['artist'] = soup\
-            .find('h2', id='album-artist-link')\
+            .find('h2', class_='album-artist')\
             .find('a')\
             .string
         album['artist'] = self.normalize_whitespaces(album['artist'])
