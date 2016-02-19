@@ -70,6 +70,19 @@ class SherlockTestCase(unittest.TestCase):
             result
             )
 
+        # Https.
+        result = s.deduct(
+            'https://www.discogs.com/Nirvana-Nevermind/master/13814'
+            )
+        self.assertEqual(
+            (
+                HttpDownloader,
+                DiscogsAlbumParser,
+                'https://www.discogs.com/Nirvana-Nevermind/master/13814'
+                ),
+            result
+            )
+
         # File. Uri should be normalized.
         result = s.deduct(
             'file:discogs:/path/to/discogs_album.html'

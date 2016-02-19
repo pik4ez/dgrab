@@ -19,6 +19,7 @@ args_parser.add_argument(
             'Uri or file path of album web page. Examples:'
             'http://allmusic.com/some_artist/some_album.html'
             'http://discogs.com/another_artist/another_album.html'
+            'https://discogs.com/https_artist/https_album.html'
             'file:allmusic:/path/to/some_album.html'
             'file:discogs:/path/to/another_album.html'
             )

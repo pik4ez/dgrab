@@ -32,7 +32,7 @@ class Sherlock:
 
         # Discogs album parser, http downloader.
         regex_discogs_album = re.compile(
-                '^http://www.discogs.com/.+?/(master|release)/\d+$'
+                '^https?://www.discogs.com/.+?/(master|release)/\d+$'
                 )
         if regex_discogs_album.match(uri):
             return (HttpDownloader, DiscogsAlbumParser, uri)
