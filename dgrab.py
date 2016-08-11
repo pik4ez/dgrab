@@ -24,6 +24,13 @@ args_parser.add_argument(
             'file:discogs:/path/to/another_album.html'
             )
         )
+args_parser.add_argument(
+        'out_file',
+        nargs='?',
+        help=(
+            'Path to file to write output to. STDOUT by default.'
+            )
+        )
 args = args_parser.parse_args()
 
 
@@ -55,5 +62,9 @@ if __name__ == '__main__':
     # Convert result to json.
     album = json.dumps(album, separators=(',', ':'))
 
-    # Print result.
-    print(album)
+    # Return result or write to file.
+    if args.out_file is None:
+        print(album)
+    else:
+        with open(args.out_file, 'w') as f:
+            f.write(album)
